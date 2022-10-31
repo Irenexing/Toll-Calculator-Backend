@@ -1,17 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './src/App';
-import reportWebVitals from './src/reportWebVitals';
+const express = require("express");
+const app = express();
+const locationRoutes = require("./routes/location");
+const fs = require("fs");
+const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+//pull
+const PORT = process.env.PORT || 8080;
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+//CORS middleware
+app.use(cors());
+
+// Middleware to give us access to req.body;
+app.use(express.json());
+
+// Middleware to serve up static files
+app.use(express.static("public"));
+
+
+//endpoint
+app.use("/", locationRoutes);
+
+
+app.listen(8080, () => {
+    console.log("Server is up and running on port 8080! 🚀")
+})
